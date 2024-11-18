@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TROJA - 딥페이크 방지 노이즈 추가</title>
+    <!-- 구글 폰트 및 아이콘 추가 -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* 업데이트된 스타일 */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Montserrat", sans-serif;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+        color: #fff;
+        min-height: 100vh;
+        overflow: hidden;
+      }
+
+      .main-container {
+        flex: 3;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .sidebar {
+        width: 100%;
+        max-width: 300px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        overflow-y: auto;
+        height: calc(100vh - 40px);
+      }
+
+      .header {
+        font-size: 36px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 30px;
+        text-align: center;
+        position: relative;
+      }
+
+      .header::after {
+        content: "";
+        width: 50px;
+        height: 4px;
+        background: linear-gradient(45deg, #ff0099, #493240);
+        display: block;
+        margin: 10px auto 0;
+        border-radius: 2px;
+      }
+
+      .banner {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+        border-radius: 20px;
+        font-size: 20px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        width: 100%;
+      }
+
+      .preview {
+        width: 100%;
+        max-width: 800px;
+        height: 500px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        overflow: hidden;
+        background-color: rgba(255, 255, 255, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        backdrop-filter: blur(10px);
+      }
+
+      .preview canvas {
+        display: none;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #ccc;
+        font-size: 24px;
+      }
+
+      .placeholder i {
+        font-size: 50px;
+        margin-bottom: 20px;
+      }
+
+      .upload-area {
+        border: 2px dashed rgba(255, 255, 255, 0.5);
+        border-radius: 20px;
+        padding: 30px;
+        text-align: center;
+        cursor: pointer;
+        transition: border-color 0.3s;
+        background-color: rgba(255, 255, 255, 0.05);
+        width: 100%;
+        max-width: 800px;
+        backdrop-filter: blur(10px);
+      }
+
+      .upload-area:hover {
+        border-color: #fff;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .btn {
+        padding: 15px 30px;
+        border-radius: 30px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: all 0.3s;
+        background: linear-gradient(45deg, #9d50bb, #6e48aa);
+        color: #fff;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .btn-secondary {
+        background: linear-gradient(45deg, #36d1dc, #5b86e5);
+      }
+
+      .btn-reset {
+        background: linear-gradient(45deg, #ff416c, #ff4b2b);
+      }
+
+      .history-container {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 20px;
+        border-radius: 20px;
+        backdrop-filter: blur(15px);
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        overflow-y: auto;
+        height: calc(100vh - 40px);
+      }
+
+      .history-title {
+        font-size: 24px;
+        margin-bottom: 20px;
+        font-weight: 700;
+        color: #fff;
+        text-align: center;
+        position: relative;
+      }
+
+      .history-title::after {
+        content: "";
+        width: 40px;
+        height: 3px;
+        background: linear-gradient(45deg, #36d1dc, #5b86e5);
+        display: block;
+        margin: 10px auto 0;
+        border-radius: 2px;
+      }
+
+      .history-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+
+      .history-item {
+        width: 100%;
+        aspect-ratio: 1;
+        background-size: cover;
+        background-position: center;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        cursor: pointer;
+        transition: transform 0.2s, border-color 0.2s;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .history-item:hover {
+        transform: scale(1.05);
+      }
+
+      .history-item.noise-added::after {
+        content: "노이즈 추가됨";
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: rgba(255, 0, 0, 0.8);
+        padding: 5px 10px;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .history-item.selected {
+        border-color: #fff;
+      }
+
+      .tool-group {
+        margin-bottom: 25px;
+      }
+
+      .tool-label {
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        margin-bottom: 10px;
+        display: block;
+      }
+
+      .tool-slider,
+      .tool-checkbox {
+        width: 100%;
+      }
+
+      /* 추가된 스타일 */
+      .tool-slider::-webkit-slider-thumb {
+        background: #fff;
+      }
+
+      .tool-slider::-moz-range-thumb {
+        background: #fff;
+      }
+
+      .tool-slider::-ms-thumb {
+        background: #fff;
+      }
+
+      /* 스크롤바 스타일 */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="header">TROJA</div>
+      <div class="edit-tools">
+        <!-- 편집 도구 섹션 -->
+        <div class="tool-group">
+          <label class="tool-label">밝기 조절</label>
+          <input
+            type="range"
+            id="brightness"
+            min="50"
+            max="150"
+            value="100"
+            class="tool-slider"
+          />
+        </div>
+        <div class="tool-group">
+          <label class="tool-label">대비 조절</label>
+          <input
+            type="range"
+            id="contrast"
+            min="50"
+            max="150"
+            value="100"
+            class="tool-slider"
+          />
+        </div>
+        <div class="tool-group">
+          <label class="tool-label">채도 조절</label>
+          <input
+            type="range"
+            id="saturation"
+            min="0"
+            max="200"
+            value="100"
+            class="tool-slider"
+          />
+        </div>
+        <div class="tool-group">
+          <label class="tool-label">흐림 효과</label>
+          <input
+            type="range"
+            id="blur"
+            min="0"
+            max="10"
+            value="0"
+            class="tool-slider"
+          />
+        </div>
+        <div class="tool-group">
+          <label class="tool-label">회색조</label>
+          <input
+            type="range"
+            id="grayscale"
+            min="0"
+            max="100"
+            value="0"
+            class="tool-slider"
+          />
+        </div>
+        <div class="tool-group">
+          <label class="tool-label">색온도 조절</label>
+          <input
+            type="range"
+            id="temperature"
+            min="-100"
+            max="100"
+            value="0"
+            class="tool-slider"
+          />
+        </div>
+        <div class="tool-group">
+          <label class="tool-label">초점 조절</label>
+          <input
+            type="range"
+            id="focus"
+            min="0"
+            max="10"
+            value="0"
+            class="tool-slider"
+          />
+        </div>
+        <div class="tool-group">
+          <label class="tool-label">레트로 스타일</label>
+          <input type="checkbox" id="retro" class="tool-checkbox" />
+        </div>
+        <div class="tool-group">
+          <label class="tool-label">회전</label>
+          <input
+            type="range"
+            id="rotation"
+            min="0"
+            max="360"
+            value="0"
+            class="tool-slider"
+          />
+        </div>
+        <button class="btn btn-reset" id="resetButton">
+          원본으로 되돌리기
+        </button>
+      </div>
+    </div>
+
+    <div class="main-container">
+      <div class="banner">
+        <i class="fas fa-shield-alt"></i>
+        딥페이크 방지 노이즈 추가로 사진을 안전하게 보호하세요.
+      </div>
+      <div class="preview" id="preview">
+        <canvas id="canvas"></canvas>
+        <div class="placeholder" id="placeholder">
+          <i class="fas fa-image"></i>
+          이미지 미리보기
+        </div>
+      </div>
+      <div class="upload-area" id="dropZone">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p>이미지 파일을 드래그하거나 클릭하여 업로드하세요.</p>
+      </div>
+      <div class="button-group">
+        <button class="btn" id="addNoiseButton">노이즈 추가</button>
+        <button class="btn btn-secondary" id="downloadButton">
+          편집된 이미지 다운로드
+        </button>
+      </div>
+    </div>
+
+    <div class="history-container">
+      <div class="history-title">업로드 히스토리</div>
+      <div class="history-grid" id="historyGrid"></div>
+    </div>
+
+    <script>
+      const dropZone = document.getElementById("dropZone");
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      const placeholder = document.getElementById("placeholder");
+      const brightnessSlider = document.getElementById("brightness");
+      const contrastSlider = document.getElementById("contrast");
+      const saturationSlider = document.getElementById("saturation");
+      const temperatureSlider = document.getElementById("temperature");
+      const rotationSlider = document.getElementById("rotation");
+      const blurSlider = document.getElementById("blur");
+      const grayscaleSlider = document.getElementById("grayscale");
+      const focusSlider = document.getElementById("focus");
+      const retroCheckbox = document.getElementById("retro");
+      const addNoiseButton = document.getElementById("addNoiseButton");
+      const downloadButton = document.getElementById("downloadButton");
+      const resetButton = document.getElementById("resetButton");
+      const historyGrid = document.getElementById("historyGrid");
+
+      let originalImage = null;
+      let currentHistoryItem = null;
+      let imageStates = {};
+      let isApplyingFilters = false;
+
+      // 디바운싱을 위한 타이머 변수
+      let applyFiltersTimeout;
+
+      // 파일 드롭 핸들러
+      dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = "#fff";
+      });
+
+      dropZone.addEventListener("dragleave", () => {
+        dropZone.style.borderColor = "rgba(255, 255, 255, 0.5)";
+      });
+
+      dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = "rgba(255, 255, 255, 0.5)";
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith("image/")) {
+          loadImage(file);
+        }
+      });
+
+      dropZone.addEventListener("click", () => {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "image/*";
+        input.onchange = (e) => {
+          const file = e.target.files[0];
+          if (file && file.type.startsWith("image/")) {
+            loadImage(file);
+          }
+        };
+        input.click();
+      });
+
+      // 이미지 로드 함수
+      function loadImage(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            originalImage = img;
+            placeholder.style.display = "none";
+            canvas.style.display = "block";
+            ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
+            const item = addToHistory(e.target.result);
+            setPreview(e.target.result, item);
+
+            // 이미지 상태 초기화
+            imageStates[e.target.result] = {
+              brightness: 100,
+              contrast: 100,
+              saturation: 100,
+              temperature: 0,
+              rotation: 0,
+              blur: 0,
+              grayscale: 0,
+              focus: 0,
+              retro: false,
+              noiseAdded: false,
+              thumbnail: e.target.result,
+            };
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      // 필터 적용 함수
+      function applyFilters() {
+        if (!originalImage || isApplyingFilters) return;
+        isApplyingFilters = true;
+
+        // 디바운싱: 필터 적용을 일정 시간 지연시킵니다.
+        clearTimeout(applyFiltersTimeout);
+        applyFiltersTimeout = setTimeout(() => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.save();
+
+          const state = imageStates[currentHistoryItem.dataset.url];
+
+          const brightness = brightnessSlider.value;
+          const contrast = contrastSlider.value;
+          const saturation = saturationSlider.value;
+          const temperature = temperatureSlider.value;
+          const rotation = rotationSlider.value;
+          const blur = blurSlider.value;
+          const grayscale = grayscaleSlider.value;
+          const focus = focusSlider.value;
+          const retro = retroCheckbox.checked;
+
+          // 상태 저장
+          state.brightness = brightness;
+          state.contrast = contrast;
+          state.saturation = saturation;
+          state.temperature = temperature;
+          state.rotation = rotation;
+          state.blur = blur;
+          state.grayscale = grayscale;
+          state.focus = focus;
+          state.retro = retro;
+
+          ctx.translate(canvas.width / 2, canvas.height / 2);
+          ctx.rotate((rotation * Math.PI) / 180);
+          ctx.translate(-canvas.width / 2, -canvas.height / 2);
+
+          // CSS 필터 사용
+          ctx.filter = `
+            brightness(${brightness}%)
+            contrast(${contrast}%)
+            saturate(${saturation}%)
+            hue-rotate(${temperature}deg)
+            blur(${blur}px)
+            grayscale(${grayscale}%)
+          `;
+
+          ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
+
+          // 초점 조절 (샤프니스) - CSS 필터로 대체
+          if (focus > 0) {
+            ctx.filter += ` drop-shadow(0 0 ${focus}px rgba(0,0,0,0.5))`;
+            ctx.drawImage(canvas, 0, 0);
+          }
+
+          // 레트로 스타일 적용
+          if (retro) {
+            ctx.fillStyle = "rgba(255, 165, 0, 0.2)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+          }
+
+          ctx.restore();
+
+          isApplyingFilters = false;
+        }, 100);
+      }
+
+      [
+        brightnessSlider,
+        contrastSlider,
+        saturationSlider,
+        rotationSlider,
+        temperatureSlider,
+        blurSlider,
+        grayscaleSlider,
+        focusSlider,
+        retroCheckbox,
+      ].forEach((control) => {
+        control.addEventListener("input", applyFilters);
+      });
+
+      // 히스토리 추가 함수
+      function addToHistory(imageUrl) {
+        const item = document.createElement("div");
+        item.classList.add("history-item");
+        item.style.backgroundImage = `url(${imageUrl})`;
+        item.dataset.url = imageUrl;
+        item.addEventListener("click", () => {
+          setPreview(imageUrl, item);
+        });
+        historyGrid.appendChild(item);
+        return item;
+      }
+
+      // 히스토리 썸네일 업데이트 함수
+      function updateHistoryThumbnail(historyItem) {
+        const url = historyItem.dataset.url;
+        const state = imageStates[url];
+        state.thumbnail = canvas.toDataURL("image/png");
+        historyItem.style.backgroundImage = `url(${state.thumbnail})`;
+      }
+
+      // 프리뷰 설정 함수
+      function setPreview(imageUrl, historyItem) {
+        const img = new Image();
+        img.onload = () => {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          originalImage = img;
+          placeholder.style.display = "none";
+          canvas.style.display = "block";
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
+
+          if (currentHistoryItem) {
+            currentHistoryItem.classList.remove("selected");
+          }
+          currentHistoryItem = historyItem;
+          currentHistoryItem.classList.add("selected");
+
+          const state = imageStates[imageUrl];
+
+          // 슬라이더 값을 상태로 복원
+          brightnessSlider.value = state.brightness;
+          contrastSlider.value = state.contrast;
+          saturationSlider.value = state.saturation;
+          temperatureSlider.value = state.temperature;
+          rotationSlider.value = state.rotation;
+          blurSlider.value = state.blur;
+          grayscaleSlider.value = state.grayscale;
+          focusSlider.value = state.focus;
+          retroCheckbox.checked = state.retro;
+
+          applyFilters();
+        };
+        img.src = imageUrl;
+      }
+
+      // 노이즈 추가 버튼
+      addNoiseButton.addEventListener("click", () => {
+        if (currentHistoryItem) {
+          const state = imageStates[currentHistoryItem.dataset.url];
+          state.noiseAdded = true;
+          currentHistoryItem.classList.add("noise-added");
+
+          // 노이즈 추가 로직
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          for (let i = 0; i < imageData.data.length; i += 4) {
+            const rand = (Math.random() - 0.5) * 20;
+            imageData.data[i] += rand;
+            imageData.data[i + 1] += rand;
+            imageData.data[i + 2] += rand;
+          }
+          ctx.putImageData(imageData, 0, 0);
+
+          // 히스토리 썸네일 업데이트
+          updateHistoryThumbnail(currentHistoryItem);
+        }
+        alert("노이즈가 성공적으로 추가되었습니다!");
+      });
+
+      // 다운로드 버튼
+      downloadButton.addEventListener("click", () => {
+        if (!originalImage) {
+          alert("다운로드할 이미지가 없습니다.");
+          return;
+        }
+        const link = document.createElement("a");
+        link.download = "edited_image.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+
+      // 원본으로 되돌리기 버튼
+      resetButton.addEventListener("click", () => {
+        if (!currentHistoryItem) return;
+
+        const state = imageStates[currentHistoryItem.dataset.url];
+
+        // 상태 초기화
+        state.brightness = 100;
+        state.contrast = 100;
+        state.saturation = 100;
+        state.temperature = 0;
+        state.rotation = 0;
+        state.blur = 0;
+        state.grayscale = 0;
+        state.focus = 0;
+        state.retro = false;
+
+        // 슬라이더 초기화
+        brightnessSlider.value = 100;
+        contrastSlider.value = 100;
+        saturationSlider.value = 100;
+        temperatureSlider.value = 0;
+        rotationSlider.value = 0;
+        blurSlider.value = 0;
+        grayscaleSlider.value = 0;
+        focusSlider.value = 0;
+        retroCheckbox.checked = false;
+
+        applyFilters();
+      });
+    </script>
+  </body>
+</html>
