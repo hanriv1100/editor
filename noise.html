@@ -187,6 +187,11 @@
         background: linear-gradient(45deg, #ff416c, #ff4b2b);
       }
 
+      /* 구매하기 버튼 스타일 추가 */
+      .btn-purchase {
+        background: linear-gradient(45deg, #e52d27, #b31217);
+      }
+
       .history-container {
         flex: 1;
         background: rgba(255, 255, 255, 0.05);
@@ -305,6 +310,7 @@
     <div class="sidebar">
       <div class="header">TROJA</div>
       <div class="edit-tools">
+        <!-- 편집 도구 섹션 -->
         <!-- 편집 도구 섹션 -->
         <div class="tool-group">
           <label class="tool-label">밝기 조절</label>
@@ -425,6 +431,13 @@
         <button class="btn btn-secondary" id="downloadButton">
           편집된 이미지 다운로드
         </button>
+        <!-- 구매하기 버튼 추가 -->
+        <a
+          href="https://docs.google.com/forms/d/e/1FAIpQLSc3BrICgz4TtHb5pN_skCCtyfIz5Z7b-3llHdYjY69vuEMk5Q/viewform?usp=sf_link"
+          class="btn btn-purchase"
+          id="purchaseButton"
+          >구매하기</a
+        >
       </div>
     </div>
 
@@ -731,6 +744,13 @@
 
         applyFilters();
       });
+
+      document
+        .getElementById("purchaseButton")
+        .addEventListener("click", function () {
+          window.location.href =
+            "https://docs.google.com/forms/d/e/1FAIpQLSc3BrICgz4TtHb5pN_skCCtyfIz5Z7b-3llHdYjY69vuEMk5Q/viewform?usp=sf_link";
+        });
     </script>
   </body>
 </html>
