@@ -1,0 +1,124 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: "Noto Sans KR", sans-serif;
+  line-height: 1.6;
+  background: #f9fafe;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+.container {
+  text-align: center;
+  max-width: 800px;
+  width: 100%;
+}
+.hero-text {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  word-break: keep-all;
+}
+.subtitle {
+  color: #7f8c8d;
+  margin-bottom: 30px;
+  font-size: 18px;
+  word-break: keep-all;
+}
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 40px;
+}
+.btn {
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s;
+}
+.btn-primary {
+  background: #3498db;
+  color: white;
+  box-shadow: 0 4px 6px rgba(52, 152, 219, 0.2);
+}
+.btn-primary:hover {
+  background: #2980b9;
+}
+.btn-secondary {
+  background: white;
+  color: #3498db;
+  border: 1px solid #3498db;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.btn-secondary:hover {
+  background: #ecf0f1;
+}
+.browser-mockup {
+  margin-top: 40px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.browser-header {
+  background: #ecf0f1;
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.browser-dots {
+  display: flex;
+  gap: 8px;
+}
+.browser-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #bdc3c7;
+}
+.browser-address {
+  flex: 1;
+  background: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #7f8c8d;
+}
+.browser-content img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.responsive-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .hero-text {
+    font-size: 36px;
+  }
+  .subtitle {
+    font-size: 16px;
+  }
+  .buttons {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
