@@ -1,20 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
   <head>
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-6THC6JSVPL"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      gtag("config", "G-6THC6JSVPL");
-    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TROJA - 딥페이크 방지 노이즈 추가</title>
@@ -164,7 +150,7 @@
       .btn {
         padding: 15px 30px;
         border-radius: 30px;
-        font-size: 16px;
+        font-size: 22px;
         font-weight: 600;
         cursor: pointer;
         border: none;
@@ -185,11 +171,6 @@
 
       .btn-reset {
         background: linear-gradient(45deg, #ff416c, #ff4b2b);
-      }
-
-      /* 구매하기 버튼 스타일 추가 */
-      .btn-purchase {
-        background: linear-gradient(45deg, #e52d27, #b31217);
       }
 
       .history-container {
@@ -304,13 +285,21 @@
       ::-webkit-scrollbar-track {
         background: transparent;
       }
+      .btn-purchase {
+        background: linear-gradient(45deg, #ff0000, #cc0000);
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        transform: translateY(-20%);
+        z-index: 1000;
+        font-size: 38px;
+      }
     </style>
   </head>
   <body>
     <div class="sidebar">
       <div class="header">TROJA</div>
       <div class="edit-tools">
-        <!-- 편집 도구 섹션 -->
         <!-- 편집 도구 섹션 -->
         <div class="tool-group">
           <label class="tool-label">밝기 조절</label>
@@ -431,19 +420,15 @@
         <button class="btn btn-secondary" id="downloadButton">
           편집된 이미지 다운로드
         </button>
-        <!-- 구매하기 버튼 추가 -->
-        <a
-          href="https://docs.google.com/forms/d/e/1FAIpQLSc3BrICgz4TtHb5pN_skCCtyfIz5Z7b-3llHdYjY69vuEMk5Q/viewform?usp=sf_link"
-          class="btn btn-purchase"
-          id="purchaseButton"
-          >구매하기</a
-        >
       </div>
     </div>
 
     <div class="history-container">
       <div class="history-title">업로드 히스토리</div>
       <div class="history-grid" id="historyGrid"></div>
+        <!-- 구매하기 버튼 추가 -->
+        <button class="btn btn-purchase" id="purchaseButton">구매하기</button>
+      </div>
     </div>
 
     <script>
@@ -744,13 +729,10 @@
 
         applyFilters();
       });
-
-      document
-        .getElementById("purchaseButton")
-        .addEventListener("click", function () {
-          window.location.href =
-            "https://docs.google.com/forms/d/e/1FAIpQLSc3BrICgz4TtHb5pN_skCCtyfIz5Z7b-3llHdYjY69vuEMk5Q/viewform?usp=sf_link";
-        });
+      const purchaseButton = document.getElementById("purchaseButton");
+      purchaseButton.addEventListener("click", () => {
+        window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSc3BrICgz4TtHb5pN_skCCtyfIz5Z7b-3llHdYjY69vuEMk5Q/viewform?usp=sf_link";
+      });
     </script>
   </body>
 </html>
