@@ -24,8 +24,7 @@ let isApplyingFilters = false;
 // 디바운싱을 위한 타이머 변수
 let applyFiltersTimeout;
 
-async function userTracking() {
-  const text = document.getElementById("textInput").value;
+async function userTracking(text) {
   try {
     const response = await fetch(
       "http://223.130.159.228/analysis/user_tracking",
@@ -320,6 +319,7 @@ resetButton.addEventListener("click", () => {
 });
 const purchaseButton = document.getElementById("purchaseButton");
 purchaseButton.addEventListener("click", () => {
+  userTracking("google_form");
   window.location.href =
     "https://docs.google.com/forms/d/e/1FAIpQLSc3BrICgz4TtHb5pN_skCCtyfIz5Z7b-3llHdYjY69vuEMk5Q/viewform?usp=sf_link";
 });
