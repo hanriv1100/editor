@@ -26,6 +26,7 @@ let applyFiltersTimeout;
 
 async function userTracking(text) {
   try {
+    console.log("userTracking");
     const response = await fetch(
       "http://223.130.159.228/analysis/user_tracking",
       {
