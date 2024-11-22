@@ -37,12 +37,8 @@ async function userTracking(text) {
       }
     );
     const result = await response.json();
-    document.getElementById("response").textContent =
-      "Server Response: " + JSON.stringify(result);
   } catch (error) {
     console.error("Error:", error);
-    document.getElementById("response").textContent =
-      "Failed to send data to server.";
   }
 }
 
