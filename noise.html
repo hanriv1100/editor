@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TROJA - 딥페이크 방지 노이즈 추가</title>
+    <title>EDITOR - 딥페이크 방지 노이즈 추가</title>
     <!-- 구글 폰트 및 아이콘 추가 -->
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
@@ -32,19 +32,15 @@
         overflow: hidden;
       }
 
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>editor - 딥페이크 방지 노이즈 추가</title>
-		<!-- 구글 폰트 및 아이콘 추가 -->
-		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
-		<style>
-			/* 업데이트된 스타일 */
-			* {
-				margin: 0;
-				padding: 0;
-				box-sizing: border-box;
-			}
+      .main-container {
+        flex: 3;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+        overflow-y: auto;
+      }
 
       .sidebar {
         width: 100%;
@@ -302,7 +298,7 @@
   </head>
   <body>
     <div class="sidebar">
-      <div class="header">TROJA</div>
+      <div class="header">EDITOR</div>
       <div class="edit-tools">
         <!-- 편집 도구 섹션 -->
         <div class="tool-group">
@@ -435,103 +431,6 @@
       </div>
     </div>
 
-<<<<<<< HEAD
-			.btn-purchase {
-				background: linear-gradient(45deg, #ff0000, #cc0000);
-				position: fixed;
-				bottom: 20px;
-				right: 20px;
-				transform: translateY(-20%);
-				z-index: 1000;
-				font-size: 38px;
-			}
-		</style>
-	</head>
-	<body>
-        <!-- Google Tag Manager (noscript) -->
-        <noscript>
-            <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NLV2T7FJ"
-            height="0" width="0" style="display:none;visibility:hidden">
-            </iframe>
-        </noscript>
-        <!-- End Google Tag Manager (noscript) -->
-		
-        
-        
-        <div class="sidebar">
-			<div class="header">editor</div>
-			<div class="edit-tools">
-				<!-- 편집 도구 섹션 -->
-				<div class="tool-group">
-					<label class="tool-label">밝기 조절</label>
-					<input type="range" id="brightness" min="50" max="150" value="100" class="tool-slider" />
-				</div>
-				<div class="tool-group">
-					<label class="tool-label">대비 조절</label>
-					<input type="range" id="contrast" min="50" max="150" value="100" class="tool-slider" />
-				</div>
-				<div class="tool-group">
-					<label class="tool-label">채도 조절</label>
-					<input type="range" id="saturation" min="0" max="200" value="100" class="tool-slider" />
-				</div>
-				<div class="tool-group">
-					<label class="tool-label">흐림 효과</label>
-					<input type="range" id="blur" min="0" max="10" value="0" class="tool-slider" />
-				</div>
-				<div class="tool-group">
-					<label class="tool-label">회색조</label>
-					<input type="range" id="grayscale" min="0" max="100" value="0" class="tool-slider" />
-				</div>
-				<div class="tool-group">
-					<label class="tool-label">색온도 조절</label>
-					<input type="range" id="temperature" min="-100" max="100" value="0" class="tool-slider" />
-				</div>
-				<div class="tool-group">
-					<label class="tool-label">초점 조절</label>
-					<input type="range" id="focus" min="0" max="10" value="0" class="tool-slider" />
-				</div>
-				<div class="tool-group">
-					<label class="tool-label">레트로 스타일</label>
-					<input type="checkbox" id="retro" class="tool-checkbox" />
-				</div>
-				<div class="tool-group">
-					<label class="tool-label">회전</label>
-					<input type="range" id="rotation" min="0" max="360" value="0" class="tool-slider" />
-				</div>
-				<button class="btn btn-reset" id="resetButton"> 원본으로 되돌리기 </button>
-			</div>
-		</div>
-		<div class="main-container">
-			<div class="banner">
-				<i class="fas fa-shield-alt"></i> 딥페이크 방지 노이즈 추가로 사진을 안전하게 보호하세요.
-			</div>
-			<div class="preview" id="preview">
-				<canvas id="canvas"></canvas>
-				<div class="placeholder" id="placeholder">
-					<i class="fas fa-image"></i> 이미지 미리보기
-				</div>
-			</div>
-			<div class="upload-area" id="dropZone">
-				<i class="fas fa-cloud-upload-alt"></i>
-				<p>이미지 파일을 드래그하거나 클릭하여 업로드하세요.</p>
-			</div>
-			<div class="button-group">
-				<button class="btn" id="addNoiseButton">노이즈 추가</button>
-				<button class="btn btn-secondary" id="downloadButton"> 편집된 이미지 다운로드 </button>
-			</div>
-		</div>
-		<div class="history-container">
-			<div class="history-title">업로드 히스토리</div>
-			<div class="history-grid" id="historyGrid"></div>
-			<!-- 구매하기 버튼 추가 -->
-			<button class="btn btn-purchase" id="purchaseButton">구매하기</button>
-		</div>
-		</div>
-		<script src="./script.js"></script>
-	</body>
-</html>
-=======
     <script src="./script.js"></script>
   </body>
 </html>
->>>>>>> 755bead157dab3c9fe57a3e1a5a756110e566a24
